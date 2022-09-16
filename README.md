@@ -1,5 +1,5 @@
 # Lung Cancer Detection
-In this project, I used multiple python libraries to detect whether a person is suffering from lung cancer. I obtained training data from [Kaggle](https://www.kaggle.com/).
+In this project, I used multiple python libraries to detect whether a person is suffering from lung cancer. I collected training data from [Kaggle](https://www.kaggle.com/).
 ## Installation of required tools
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install numpy, pandas, sklearn.
