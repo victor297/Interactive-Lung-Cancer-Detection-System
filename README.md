@@ -38,7 +38,7 @@ X = data.drop(['LUNG_CANCER', 'label'], axis=1)
 Y = data['label'].astype(int)
 ```
 ## Differentiation of training and testing data
-X_train, X_test, Y_train, Y_test are four matrices which store respective data. 'test_size' represents percentage of data that should be used for testing. Here 'test_size = 0.3' represents that 30% of data will be used for testing and rest 80% will be used for training data. Also, in the data 2 represents 'YES' and 1 represents 'NO'.\
+X_train, X_test, Y_train, Y_test are four matrices which store respective data. 'test_size' represents percentage of data that should be used for testing. Here 'test_size = 0.3' represents that 30% of data will be used for testing and rest 70% will be used for training data. Also, in the data 2 represents 'YES' and 1 represents 'NO'.\
 Optionally, we can use random_state variable to have a control on the way of how data splits.\
 **Note : train_test_split is an inbuilt function from sklearn.linear_model**
 
