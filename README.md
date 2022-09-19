@@ -132,3 +132,7 @@ if __name__ == "__main__":
 
 ```
 
+Output : 
+![Output_Screenshot](https://user-images.githubusercontent.com/94124126/191048414-05d75c9b-9278-4714-aa42-c5f621b87cee.png)
+
+
