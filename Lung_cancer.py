@@ -26,10 +26,10 @@ X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.3)
 
 
-model = LogisticRegression(max_iter = 1000)
+model = LogisticRegression(max_iter=1000)
 # model = LogisticRegression(max_iter = 100(by default))
 
-model.fit(X_train, Y_train)
+model.fit(X_train.values, Y_train)
 
 # ptrain = model.predict(X_train)
 # accuracy = accuracy_score(Y_train, ptrain)
@@ -75,18 +75,19 @@ def main():
     func(alcohol, user_inputs)
     cough = input("Do you cough on a regular basis? (Yes/No) : ")
     func(cough, user_inputs)
-    breathing = input("Do you have any kind of difficulity in breathing? (Yes/No) : ")
+    breathing = input(
+        "Do you have any kind of difficulity in breathing? (Yes/No) : ")
     func(breathing, user_inputs)
-    swallowing = input("Do you have any kind of difficulity in swallowing? (Yes/No) : ")
+    swallowing = input(
+        "Do you have any kind of difficulity in swallowing? (Yes/No) : ")
     func(swallowing, user_inputs)
     chest_pain = input("Are you suffering from chest pain? (Yes/No) : ")
     func(chest_pain, user_inputs)
-    
-    
-    narry = np.asarray(user_inputs)
+
+    narry = np.asarray(user_inputs, dtype=int)
     reshaped_array = narry.reshape(1, -1)
     prediction = model.predict(reshaped_array)
-    if(prediction == 1):
+    if (prediction == 1):
         print("High chances of lung cancer")
     else:
         print("Low chances of lung cancer")
@@ -94,4 +95,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
