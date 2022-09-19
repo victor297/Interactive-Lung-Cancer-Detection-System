@@ -134,6 +134,7 @@ if __name__ == "__main__":
 
 Output samples: 
 ![Output_Screenshot](https://user-images.githubusercontent.com/94124126/191048414-05d75c9b-9278-4714-aa42-c5f621b87cee.png)
-![Screenshot2](https://user-images.githubusercontent.com/94124126/191049025-612d440f-8b81-43b9-bd56-45202821b8e2.png)
+![Screenshot2](https://user-images.githubusercontent.com/94124126/191049242-41b3f279-e6ed-4c11-a586-5e644c3de58c.png)
+
 
 
