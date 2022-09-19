@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 
-data = pd.read_csv('D:/temp/cancer_data.csv')
+data = pd.read_csv('D:/MyProjects/Lung_Cancer_Detection/cancer_data.csv')
 
 '''
 In inbuilt data,
