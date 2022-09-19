@@ -21,7 +21,7 @@ from sklearn.metrics import accuracy_score
 ## Read data from file
 In [pandas](https://pandas.pydata.org/), we have a function named read_csv, which is used to read data from csv files. After retrieving data from file, we store it in a variable 'data'.
 ```python
-data = pd.read_csv('D:/temp/cancer_data.csv') #This data is downloded from kaggle
+data = pd.read_csv('D:/MyProjects/Lung_Cancer_Detection/cancer_data.csv') #This data is downloded from kaggle
 ```
 ## Conversion of data into numeric values
 Labelling data for better understanding.
@@ -120,10 +120,10 @@ After obtaining a list of inputs from user, we take help of numpy array to resha
 After this, we print output.
 
 ```python
-    narry = np.asarray(user_inputs)
+    narry = np.asarray(user_inputs, dtype=int)
     reshaped_array = narry.reshape(1, -1)
     prediction = model.predict(reshaped_array)
-    if(prediction == 1):
+    if (prediction == 1):
         print("High chances of lung cancer")
     else:
         print("Low chances of lung cancer")
