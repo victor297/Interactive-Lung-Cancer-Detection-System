@@ -185,13 +185,7 @@ if __name__ == "__main__":
     main()
 
 ```
-
-<<<<<<< HEAD
-Output sample: 
-Decision Tree
-=======
-Output samples: 
->>>>>>> 24c12dc763c5ecf6e30bf74045dce483e41702e7
+Output Sample: 
 ![Decision_Tree](https://user-images.githubusercontent.com/94124126/211165760-8105c99b-a183-4c3b-b199-f1dcadc5ef53.png)
 
 
