@@ -59,9 +59,9 @@ accuracy = accuracy_score(Y_test, ptest)
 print(accuracy)
 
 # Plotting the Decision Tree
-# plt.figure(figsize=(20,10))
-# plot_tree(decision_tree = Decision_Tree_model, filled=True, feature_names=X.columns, rounded = True)
-# plt.show()
+plt.figure(figsize=(20,10))
+plot_tree(decision_tree = Decision_Tree_model, filled=True, feature_names=X.columns, rounded = True)
+plt.show()
 
 #---------------------------------------------------------------------------------
 
