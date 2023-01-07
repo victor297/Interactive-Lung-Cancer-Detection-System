@@ -16,6 +16,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.tree import DecisionTreeClassifier
+import matplotlib.pyplot as plt
+from sklearn.tree import plot_tree
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
 ```
 
 ## Read data from file
@@ -45,30 +52,72 @@ Optionally, we can use random_state variable to have a control on the way of how
 ```python
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
 ```
-## Implementation of Model
-Since we are dealing with a classification problem, we use Logistic Regression. By default in lbfgs, the maximum itertaions are 100. If there is a need for increase in iterations, we can pass a parameter 'max_iter' as shown below.
+# Implementation of Models
+Since we are dealing with a Classification problem, we use many classification techniques. I used the following models : 
+* Logistic Regression
+* Decision Tree
+* Support Vector Machine
+* K - Nearest Neighbours
+* Random Forest Classifier
+* Naive Bayes
+
+## Logistic Regression
+By default in LBFGS, the maximum itertaions are 100. If there is a need for increase in iterations, we can pass a parameter 'max_iter' as shown below.
 ```python
-model = LogisticRegression(max_iter = 1000)
-model.fit(X_train, Y_train)
+Logistic_Regression_model = LogisticRegression(max_iter=1000)
+Logistic_Regression_model.fit(X_train.values, Y_train.values)
 ```
+## Decision Tree
+```python
+Decision_Tree_model = DecisionTreeClassifier()
+Decision_Tree_model.fit(X_train.values, Y_train.values)
+```
+### For plotting tree
+```python
+plt.figure(figsize=(20,10))
+plot_tree(decision_tree = Decision_Tree_model, filled=True, feature_names=X.columns, rounded = True)
+plt.show()
+```
+## Support Vector Machine
+```python
+SVM_model = SVC()
+SVM_model.fit(X_train.values, Y_train.values)
+```
+## K - Nearest Neighbours Model
+By default, nearest neighbours is 5
+```python 
+KNN_model = KNeighborsClassifier(4) 
+KNN_model.fit(X_train.values, Y_train.values)
+```
+## Random Forest Classifier
+```python
+Random_Forest_Classifier = RandomForestClassifier()
+Random_Forest_Classifier.fit(X_train.values, Y_train.values)
+```
+## Naive Bayes Model
+```python
+Naive_Bayes_model = GaussianNB()
+Naive_Bayes_model.fit(X_train.values, Y_train.values)
+```
+
 
 ## Prediction and accuracy
 From sklearn.metrics, we have already imported accuracy_score, which will be used here to calculate how accurately our model is able to predict data.\
 At first we calculate the predicted data and store it in variable ptrain, then compare it with original data (Y_train).
 ```python
-ptrain = model.predict(X_train)
+ptrain = Model_Name.predict(X_train.values)
 accuracy = accuracy_score(Y_train, ptrain)
 print(accuracy)
 ```
 
-The above task is performed again on test data, to avoid overfitting.
+The above task is performed again on test data, to check for overfitting.
 ```python
-ptest = model.predict(X_test)
+ptest = Model_Name.predict(X_test.values)
 accuracy = accuracy_score(Y_test, ptest)
 print(accuracy)
 ```
 
-## Convert function 
+# Convert function 
 This function is used to convert string to corresponding integer.\
 To better understand this function kindly refer main function.
 ```python
@@ -123,18 +172,21 @@ After this, we print output.
     narry = np.asarray(user_inputs, dtype=int)
     reshaped_array = narry.reshape(1, -1)
     prediction = model.predict(reshaped_array)
-    if (prediction == 1):
-        print("High chances of lung cancer")
-    else:
-        print("Low chances of lung cancer")
+    print("1 - High chances of lung cancer")
+    print("0 - Low chances of lung cancer")
+    print('\n\n\n\n\n')
+    print("Prediction using Logistic regression : ", Logistic_Regression_model.predict(reshaped_array)[0])
+    print("Prediction using Decision Tree : ", Decision_Tree_model.predict(reshaped_array)[0])
+    print("Prediction using SVM Model : ", SVM_model.predict(reshaped_array)[0])
+    print("Prediction using KNN Model : ", KNN_model.predict(reshaped_array)[0])
+    print("Prediction using Random Forest Classifier : ", Random_Forest_Classifier.predict(reshaped_array)[0])
+    print("Prediction using Naive Bayes Model : ", Naive_Bayes_model.predict(reshaped_array)[0])
 if __name__ == "__main__":
     main()
 
 ```
 
 Output samples: 
-![Output_Screenshot](https://user-images.githubusercontent.com/94124126/191048414-05d75c9b-9278-4714-aa42-c5f621b87cee.png)
-![Screenshot2](https://user-images.githubusercontent.com/94124126/191049242-41b3f279-e6ed-4c11-a586-5e644c3de58c.png)
-
+![Decision_Tree](https://user-images.githubusercontent.com/94124126/211165760-8105c99b-a183-4c3b-b199-f1dcadc5ef53.png)
 
 
