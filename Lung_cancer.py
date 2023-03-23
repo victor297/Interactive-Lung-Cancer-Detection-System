@@ -66,7 +66,8 @@ plt.show()
 #---------------------------------------------------------------------------------
 
 # Support Vector Machine Model
-svm_model = SVC()
+# svm_model = SVC() #By default Radial - basis function kernel
+svm_model = SVC(kernel = 'linear')
 svm_model.fit(X_train.values, Y_train.values)
 
 print('Test Accuracy for SVM Model : ', end = '')
@@ -77,7 +78,9 @@ print(accuracy)
 #---------------------------------------------------------------------------------
 
 # K - Nearest Neighbours Model
-knn_model = KNeighborsClassifier(3) #by default nearest neighbours is 5
+
+# knn_model = KNeighborsClassifier(value of k) #By default, value of k is 5
+knn_model = KNeighborsClassifier(5) 
 knn_model.fit(X_train.values, Y_train.values)
 
 print('Test Accuracy for KNN Model : ', end = '')
@@ -154,6 +157,8 @@ def main():
 
     narry = np.asarray(user_inputs, dtype=int)
     reshaped_array = narry.reshape(1, -1)
+    print('\n')
+    print('\n')
     print("1 - High chances of lung cancer")
     print("0 - Low chances of lung cancer")
     print('\n')
@@ -166,3 +171,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
