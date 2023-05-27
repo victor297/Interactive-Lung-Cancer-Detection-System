@@ -62,17 +62,16 @@ Optionally, we can use random_state variable to have a control on the way of how
 ```python
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
 ```
-# Implementation of Models
-Since we are dealing with a Classification problem, we use many classification techniques. I used the following models : 
+## Classification techniques used
+```
 * Logistic Regression
 * Decision Tree
 * Support Vector Machine
 * K - Nearest Neighbours
 * Random Forest Classifier
 * Naive Bayes
-
+```
 ## Logistic Regression
-By default in LBFGS, the maximum itertaions are 100. If there is a need for increase in iterations, we can pass a parameter 'max_iter' as shown below.
 ```python
 Logistic_Regression_model = LogisticRegression(max_iter=1000)
 Logistic_Regression_model.fit(X_train.values, Y_train.values)
@@ -110,11 +109,15 @@ Naive_Bayes_model = GaussianNB()
 Naive_Bayes_model.fit(X_train.values, Y_train.values)
 ```
 ## Individual features 
-Specific features in each model are described in the implementation
+```
+Specific features in each model are described in the implementation.
+```
 
 ## Prediction and accuracy
-From sklearn.metrics, we have already imported accuracy_score, which will be used here to calculate how accurately our model is able to predict data.\
-At first we calculate the predicted data and store it in variable ptrain, then compare it with original data (Y_train).
+```
+I made use of a function called accuracy_score, which is available in sklearn.metrics.
+At first, I predicted data and stored it in variable ptrain, then compared it with original data (Y_train).
+```
 ```python
 ptrain = Model_Name.predict(X_train.values)
 accuracy = accuracy_score(Y_train, ptrain)
@@ -128,8 +131,10 @@ accuracy = accuracy_score(Y_test, ptest)
 print(accuracy)
 ```
 
-# Convert dictionary
-This dictionary is used to convert string to corresponding integer.\
+## Convert dictionary
+```
+This dictionary is used to map strings to integers and vice versa. Pleas have a look at the main function to better understand convert dictionary.
+```
 ```python
 convert = {
     'Yes': 2,
@@ -140,10 +145,8 @@ convert = {
     0: 'Low chances of Lung Cancer'
 }
 ```
-## The main function
-In the main function, we take input for every value from user, then convert that respond to an integer using dictionary.
 
-## Preparation of data
+## Main function & Preparation of the data
 ```python
 def main():
     data = pd.read_csv('D:/MyProjects/Lung_Cancer_Detection/cancer_data.csv')
@@ -160,9 +163,11 @@ def main():
     if view_dataset: # to check whether the button is clicked
         st.write(data)
 ```
-The below part is used to handle input from user. \
+```
+The below part is used to handle input from user.
 st.selectbox is a dropdown.
 st.write, puts content on the screen.
+```
 ```python
     user_inputs = []
 
