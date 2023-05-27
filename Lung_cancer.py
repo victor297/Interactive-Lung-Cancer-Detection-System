@@ -12,7 +12,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 
 import streamlit as st
-from time import sleep
 st.title("Lung Cancer Detection")
 
 convert = {
@@ -81,28 +80,28 @@ def main():
     user_inputs.append(convert.get(chest_pain))
 
     # model handling
-    choosen_model = st.selectbox("Choose your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine",
+    selected_model = st.selectbox("select your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine",
                                                           "K Nearest Neigbours", "Random Forest", "Naive Bayes"))
     if not (gender and age and smoke and yellow_fingers and anxiety and chronic and fatigue and allergy and wheezing and alcohol and cough and breathing and swallowing and chest_pain) or None in user_inputs:
         pass
-    elif not choosen_model or choosen_model == "None":
-        st.write("Please choose one of the given models")
+    elif not selected_model or selected_model == "None":
+        st.write("Please select one of the given models")
     else:
-        # st.write('Model : ', choosen_model)
+        # st.write('Model : ', selected_model)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
         # conversion of array
         narry = np.asarray(user_inputs, dtype=int)
         reshaped_array = narry.reshape(1, -1)
 
-        if choosen_model == "Logistic Regression":
-            solver = st.selectbox("Choose solver", ("None", "liblinear", "lbfgs", "sag", "saga"))
+        if selected_model == "Logistic Regression":
+            solver = st.selectbox("select solver", ("None", "liblinear", "lbfgs", "sag", "saga"))
             if solver and solver != "None":
                 if solver == "liblinear":
-                    penalty = st.selectbox("Please choose penalty", ('l1', 'l2'))
+                    penalty = st.selectbox("Please select penalty", ('l1', 'l2'))
                 elif solver == "lbfgs" or solver == "sag":
-                    penalty = st.selectbox("Please choose penalty", ('l2', 'none'))
+                    penalty = st.selectbox("Please select penalty", ('l2', 'none'))
                 else:
-                    penalty = st.selectbox("Please choose penalty", ('l1', 'l2', 'none'))
+                    penalty = st.selectbox("Please select penalty", ('l1', 'l2', 'none'))
                 Logistic_Regression_model = LogisticRegression(max_iter=1000, solver=solver, penalty=penalty)
                 Logistic_Regression_model.fit(X_train.values, Y_train.values)
                 st.write("Prediction using Logistic regression : ", convert.get(
@@ -112,15 +111,15 @@ def main():
                 if view_train_accuracy:
                     ptrain = Logistic_Regression_model.predict(X_train.values)
                     accuracy = accuracy_score(Y_train, ptrain)
-                    st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                    st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
 
                 view_test_accuracy = st.button("View test accuracy")                
                 if view_test_accuracy:
                     ptest = Logistic_Regression_model.predict(X_test.values)
                     accuracy = accuracy_score(Y_test, ptest)
-                    st.write(f"Test accuracy for {choosen_model} {round(accuracy*100, 5)}%")
+                    st.write(f"Test accuracy for {selected_model} {round(accuracy*100, 5)}%")
 
-        elif choosen_model == "Decision Tree":
+        elif selected_model == "Decision Tree":
             criterion = st.selectbox("Criterion", ('Select', 'gini', 'entropy'))
             if criterion != 'Select':
                 Decision_Tree_model = DecisionTreeClassifier(criterion=criterion)
@@ -139,19 +138,19 @@ def main():
                 if view_train_accuracy:
                     ptrain = Decision_Tree_model.predict(X_train.values)
                     accuracy = accuracy_score(Y_train, ptrain)
-                    st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                    st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
                 view_test_accuracy = st.button("View test accuracy")                
                 if view_test_accuracy:
                     ptest = Decision_Tree_model.predict(X_test.values)
                     accuracy = accuracy_score(Y_test, ptest)
-                    st.write(f"Test accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                    st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
                 
-        elif choosen_model == "Support Vector Machine":
+        elif selected_model == "Support Vector Machine":
             # svm_model = SVC() #By default Radial - Basis function kernel
-            choosen_kernel = st.selectbox(
+            selected_kernel = st.selectbox(
                 "Please select a kernel", ("None", "linear", "rbf", "poly"))
-            if choosen_kernel and choosen_kernel != "None":
-                svm_model = SVC(kernel=choosen_kernel)
+            if selected_kernel and selected_kernel != "None":
+                svm_model = SVC(kernel=selected_kernel)
                 svm_model.fit(X_train.values, Y_train.values)
                 st.write("Prediction using SVM Model : ", convert.get(
                     svm_model.predict(reshaped_array)[0]))
@@ -159,18 +158,18 @@ def main():
                 if view_train_accuracy:
                     ptrain = svm_model.predict(X_train.values)
                     accuracy = accuracy_score(Y_train, ptrain)
-                    st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                    st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
                 view_test_accuracy = st.button("View test accuracy")                
                 if view_test_accuracy:
                     ptest = svm_model.predict(X_test.values)
                     accuracy = accuracy_score(Y_test, ptest)
-                    st.write(f"Test accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                    st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
 
-        elif choosen_model == "K Nearest Neigbours":
+        elif selected_model == "K Nearest Neigbours":
             # knn_model = KNeighborsClassifier(value of k) #By default, value of k is 5
-            weights = st.selectbox("Choose weights", ("Select", "uniform", "distance"))
+            weights = st.selectbox("select weights", ("Select", "uniform", "distance"))
             if weights != "Select":
-                kval = st.slider("Please choose the value of k", 0, len(X_train.values))
+                kval = st.slider("Please select the value of k", 0, len(X_train.values))
                 if kval:
                     knn_model = KNeighborsClassifier(n_neighbors = kval, weights=weights)
                     knn_model.fit(X_train.values, Y_train.values)
@@ -180,15 +179,15 @@ def main():
                     if view_train_accuracy:
                         ptrain = knn_model.predict(X_train.values)
                         accuracy = accuracy_score(Y_train, ptrain)
-                        st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                        st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
                     view_test_accuracy = st.button("View test accuracy")                
                     if view_test_accuracy:
                         ptest = knn_model.predict(X_test.values)
                         accuracy = accuracy_score(Y_test, ptest)
-                        st.write(f"Test accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                        st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
 
-        elif choosen_model == "Random Forest":
-            n = st.slider("Choose number of estimators", 1, 5000)
+        elif selected_model == "Random Forest":
+            n = st.slider("select number of estimators", 1, 5000)
             criterion = st.selectbox("Criterion", ('gini', 'entropy'))
             Random_Forest_Classifier = RandomForestClassifier(n_estimators = n, criterion=criterion)
             Random_Forest_Classifier.fit(X_train.values, Y_train.values)
@@ -198,14 +197,14 @@ def main():
             if view_train_accuracy:
                 ptrain = Random_Forest_Classifier.predict(X_train.values)
                 accuracy = accuracy_score(Y_train, ptrain)
-                st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
             view_test_accuracy = st.button("View test accuracy")                
             if view_test_accuracy:
                 ptest = Random_Forest_Classifier.predict(X_test.values)
                 accuracy = accuracy_score(Y_test, ptest)
-                st.write(f"Test accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
             
-        elif choosen_model == "Naive Bayes":
+        elif selected_model == "Naive Bayes":
             Naive_Bayes_model = GaussianNB()
             Naive_Bayes_model.fit(X_train.values, Y_train.values)
             st.write("Prediction using Naive Bayes Model : ", convert.get(
@@ -214,12 +213,12 @@ def main():
             if view_train_accuracy:
                 ptrain = Naive_Bayes_model.predict(X_train.values)
                 accuracy = accuracy_score(Y_train, ptrain)
-                st.write(f"Train accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
             view_test_accuracy = st.button("View test accuracy")                
             if view_test_accuracy:
                 ptest = Naive_Bayes_model.predict(X_test.values)
                 accuracy = accuracy_score(Y_test, ptest)
-                st.write(f"Test accuracy for {choosen_model} is {round(accuracy*100, 5)}%")
+                st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
 
 
 if __name__ == "__main__":
