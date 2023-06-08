@@ -1,19 +1,22 @@
 # Lung Cancer Detection
-Built this data-driven lung cancer detection system by employing multiple Machine Learning algorithms such as Logistic Regression, Decision Tree, SVM, KNN, Random Forest, and Naive Bayes on a dataset from [Kaggle](https://www.kaggle.com/), achieving a combined accuracy of 94.6183%, using python modules such as [numpy](https://numpy.org/), [pandas](https://pandas.pydata.org/), [scikit learn](https://scikit-learn.org/), [streamlit](https://streamlit.io/).
+Built this data-driven lung cancer detection system by employing multiple Machine Learning algorithms such as Logistic Regression, Decision Tree, SVM, KNN, Random Forest, and Naive Bayes on a dataset from [Kaggle](https://www.kaggle.com/), achieving a combined accuracy of 94.6183%, using python modules such as [numpy](https://numpy.org/), [pandas](https://pandas.pydata.org/), [matplotlib](https://matplotlib.org/),[scikit learn](https://scikit-learn.org/), [streamlit](https://streamlit.io/), [tensorflow](https://tensorflow.org/).
 ## Installation of required tools
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install numpy, pandas, sklearn.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install numpy, pandas, sklearn, streamlit, imblearn and tensorflow.
 ```python
 pip install numpy
 pip install pandas
+pip install matplotlib
 pip install sklearn
 pip install streamlit
+pip install imblearn
+pip install tensorflow
 ```
 ## To run the file
 ```
-    1. Download the source code, give it a name such as "LCD.py"
-    2. Open the terminal and locate the file
-    3. Use the command "streamlit run LCD.py"
+    1. Download the source code, give it a name
+    2. Open any terminal and locate the file
+    3. Use the command "streamlit run file_name.py"
 ```
 
 
@@ -33,35 +36,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import streamlit
+import tensorflow as tf
+from tensorflow import keras
+from imblearn.combine import SMOTETomek
 ```
 
-## Read data from file
-In [pandas](https://pandas.pydata.org/), we have a function named read_csv, which is used to read data from csv files. After retrieving data from file, we store it in a variable 'data'.
-```python
-data = pd.read_csv('D:/MyProjects/Lung_Cancer_Detection/cancer_data.csv') #This data is downloded from kaggle
-```
-## Conversion of data into numeric values
-Labelling data for better understanding.
-```python
-data.loc[data['LUNG_CANCER'] == 'YES', 'label', ] = 1
-data.loc[data['LUNG_CANCER'] == 'NO', 'label', ] = 0
-data.loc[data['GENDER'] == 'M', 'GENDER', ] = 1
-data.loc[data['GENDER'] == 'F', 'GENDER', ] = 0
-```
-## Differentiation of input data and output label
-
-```python
-X = data.drop(['LUNG_CANCER', 'label'], axis=1)
-Y = data['label'].astype(int)
-```
-## Differentiation of training and testing data
-X_train, X_test, Y_train, Y_test are four matrices which store respective data. 'test_size' represents percentage of data that should be used for testing. Here 'test_size = 0.3' represents that 30% of data will be used for testing and rest 70% will be used for training data. Also, in the data 2 represents 'YES' and 1 represents 'NO'.\
-Optionally, we can use random_state variable to have a control on the way of how data splits.\
-**Note : train_test_split is an inbuilt function from sklearn.linear_model**
-
-```python
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
-```
 ## Classification techniques used
 ```
 * Logistic Regression
@@ -70,43 +49,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
 * K - Nearest Neighbours
 * Random Forest Classifier
 * Naive Bayes
-```
-## Logistic Regression
-```python
-Logistic_Regression_model = LogisticRegression(max_iter=1000)
-Logistic_Regression_model.fit(X_train.values, Y_train.values)
-```
-## Decision Tree
-```python
-Decision_Tree_model = DecisionTreeClassifier()
-Decision_Tree_model.fit(X_train.values, Y_train.values)
-```
-### For plotting tree
-```python
-plt.figure(figsize=(20,10))
-plot_tree(decision_tree = Decision_Tree_model, filled=True, feature_names=X.columns, rounded = True)
-plt.show()
-```
-## Support Vector Machine
-```python
-SVM_model = SVC()
-SVM_model.fit(X_train.values, Y_train.values)
-```
-## K - Nearest Neighbours Model
-By default, nearest neighbours is 5
-```python 
-KNN_model = KNeighborsClassifier(4) 
-KNN_model.fit(X_train.values, Y_train.values)
-```
-## Random Forest Classifier
-```python
-Random_Forest_Classifier = RandomForestClassifier()
-Random_Forest_Classifier.fit(X_train.values, Y_train.values)
-```
-## Naive Bayes Model
-```python
-Naive_Bayes_model = GaussianNB()
-Naive_Bayes_model.fit(X_train.values, Y_train.values)
+* Artificial Neural Networks
 ```
 ## Individual features 
 ```
@@ -149,18 +92,34 @@ convert = {
 ## Main function & Preparation of the data
 ```python
 def main():
-    data = pd.read_csv('D:/MyProjects/Lung_Cancer_Detection/cancer_data.csv')
-    data.loc[data['LUNG_CANCER'] == 'YES', 'label', ] = 1
-    data.loc[data['LUNG_CANCER'] == 'NO', 'label', ] = 0
+    #data retrieval
+    data = pd.read_csv('D:/Programming/Streamlit/Lung_Cancer/cancer_data.csv')
 
-    data.loc[data['GENDER'] == 'M', 'GENDER', ] = 1
-    data.loc[data['GENDER'] == 'F', 'GENDER', ] = 0
+    #plotting labels to check data
+    # label_counts = data['LUNG_CANCER'].value_counts()
+    # fig, ax = plt.subplots()
+    # colors = ['Red', 'Green']
+    # ax.pie(label_counts, labels=label_counts.index, autopct='%1.1f%%', colors=colors)
+    # st.pyplot(fig)
 
-    X = data.drop(['LUNG_CANCER', 'label'], axis=1)
-    Y = data['label'].astype(int)
-    data = data.drop('LUNG_CANCER', axis=1)
-    view_dataset = st.button("View dataset") #button from streamlit
-    if view_dataset: # to check whether the button is clicked
+
+    data['LUNG_CANCER'] = data['LUNG_CANCER'].replace({'YES': 1, 'NO': 0})
+    data['GENDER'] = data['GENDER'].replace({'M': 1, 'F': 0})
+
+    X = data.drop(['LUNG_CANCER'], axis = 1)
+    Y = data['LUNG_CANCER'].astype(int)
+
+
+    #Handling imbalance
+    smk = SMOTETomek(random_state = 42)
+    X, Y = smk.fit_resample(X, Y)
+    data = X
+    data['LUNG_CANCER'] = Y
+    X = data.drop(['LUNG_CANCER'], axis = 1).astype(int)
+    Y = data['LUNG_CANCER'].astype(int)
+    
+    view_dataset = st.button("View dataset")
+    if view_dataset:
         st.write(data)
 ```
 ```
@@ -209,9 +168,9 @@ st.write, puts content on the screen.
         "Are you suffering from chest pain?", ("Select", "Yes", "No"))
     user_inputs.append(convert.get(chest_pain))
 ```
-# Input validation and training
+# Input validation and splitting training and testing data
 ```python
-    selected_model = st.selectbox("select your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine", "K Nearest Neighbour", "Random Forest", "Naive Bayes"))
+    selected_model = st.selectbox("select your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine", "K Nearest Neighbour", "Random Forest", "Naive Bayes", "Artificial Neural Networks"))
     
     # handle errors in input
     if not (gender and age and smoke and yellow_fingers and anxiety and chronic and fatigue and allergy and wheezing and alcohol and cough and breathing and swallowing and chest_pain) or None in user_inputs:
@@ -363,6 +322,31 @@ st.write, puts content on the screen.
                 ptest = Naive_Bayes_model.predict(X_test.values)
                 accuracy = accuracy_score(Y_test, ptest)
                 st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
+```
+## Artificial Neural Networks
+```python
+    elif selected_model == "Artificial Neural Networks":
+            model = keras.Sequential([
+                keras.layers.Dense(100, input_shape=(14,), activation = 'sigmoid'),
+                keras.layers.Dense(100, activation = 'sigmoid'),
+                keras.layers.Dense(100, activation = 'sigmoid'),
+                keras.layers.Dense(2, activation = 'sigmoid'),
+            ])
+            model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics=['accuracy'])
+            with st.spinner('Please wait while model is running'):
+                history = model.fit(X_train, Y_train, epochs = 120)
+            predictArray = [reshaped_array]
+            predictAns = model.predict(predictArray)
+            st.write("Prediction using Artificial Neural networks : ", convert.get(np.argmax(predictAns)))
+            view_train_accuracy = st.button("View train accuracy")
+            if view_train_accuracy:
+                accuracy = history.history['accuracy'][-1]
+                st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
+            view_test_accuracy = st.button("View test accuracy")
+            if view_test_accuracy:
+                loss, accuracy = model.evaluate(X_test, Y_test)
+                st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
+
 ```
 ## Calling the main function
 ```python

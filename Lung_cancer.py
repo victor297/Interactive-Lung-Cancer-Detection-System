@@ -10,8 +10,12 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
-
 import streamlit as st
+import tensorflow as tf
+from tensorflow import keras
+from imblearn.combine import SMOTETomek
+
+#streamlit title
 st.title("Lung Cancer Detection")
 
 convert = {
@@ -26,19 +30,36 @@ convert = {
 
 
 def main():
-    data = pd.read_csv('D:\Programming\Streamlit\cancer_data.csv')
-    data.loc[data['LUNG_CANCER'] == 'YES', 'label', ] = 1
-    data.loc[data['LUNG_CANCER'] == 'NO', 'label', ] = 0
+    
+    #data retrieval
+    data = pd.read_csv('D:/Programming/Streamlit/Lung_Cancer/cancer_data.csv')
 
-    data.loc[data['GENDER'] == 'M', 'GENDER', ] = 1
-    data.loc[data['GENDER'] == 'F', 'GENDER', ] = 0
+    #plotting label
+    # label_counts = data['LUNG_CANCER'].value_counts()
+    # fig, ax = plt.subplots()
+    # colors = ['Red', 'Green']
+    # ax.pie(label_counts, labels=label_counts.index, autopct='%1.1f%%', colors=colors)
+    # st.pyplot(fig)
 
-    X = data.drop(['LUNG_CANCER', 'label'], axis=1)
-    Y = data['label'].astype(int)
-    data = data.drop('LUNG_CANCER', axis=1)
+    data['LUNG_CANCER'] = data['LUNG_CANCER'].replace({'YES': 1, 'NO': 0})
+    data['GENDER'] = data['GENDER'].replace({'M': 1, 'F': 0})
+
+    X = data.drop(['LUNG_CANCER'], axis = 1)
+    Y = data['LUNG_CANCER'].astype(int)
+
+
+    #Handling imbalance
+    smk = SMOTETomek(random_state = 42)
+    X, Y = smk.fit_resample(X, Y)
+    data = X
+    data['LUNG_CANCER'] = Y
+    X = data.drop(['LUNG_CANCER'], axis = 1).astype(int)
+    Y = data['LUNG_CANCER'].astype(int)
+    
     view_dataset = st.button("View dataset")
     if view_dataset:
         st.write(data)
+    
     user_inputs = []
 
     gender = st.selectbox("Please select your gender : ", ("Select", "M", "F"))
@@ -80,8 +101,8 @@ def main():
     user_inputs.append(convert.get(chest_pain))
 
     # model handling
-    selected_model = st.selectbox("select your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine",
-                                                          "K Nearest Neigbours", "Random Forest", "Naive Bayes"))
+    selected_model = st.selectbox("Select your model : ", ("None", "Logistic Regression", "Decision Tree", "Support Vector Machine",
+                                                          "K Nearest Neigbours", "Random Forest", "Naive Bayes", "Artificial Neural Networks"))
     if not (gender and age and smoke and yellow_fingers and anxiety and chronic and fatigue and allergy and wheezing and alcohol and cough and breathing and swallowing and chest_pain) or None in user_inputs:
         pass
     elif not selected_model or selected_model == "None":
@@ -219,7 +240,27 @@ def main():
                 ptest = Naive_Bayes_model.predict(X_test.values)
                 accuracy = accuracy_score(Y_test, ptest)
                 st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
-
+        elif selected_model == "Artificial Neural Networks":
+            model = keras.Sequential([
+                keras.layers.Dense(100, input_shape=(14,), activation = 'sigmoid'),
+                keras.layers.Dense(100, activation = 'sigmoid'),
+                keras.layers.Dense(100, activation = 'sigmoid'),
+                keras.layers.Dense(2, activation = 'sigmoid'),
+            ])
+            model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics=['accuracy'])
+            with st.spinner('Please wait while model is running'):
+                history = model.fit(X_train, Y_train, epochs = 120)
+            predictArray = [reshaped_array]
+            predictAns = model.predict(predictArray)
+            st.write("Prediction using Artificial Neural networks : ", convert.get(np.argmax(predictAns)))
+            view_train_accuracy = st.button("View train accuracy")
+            if view_train_accuracy:
+                accuracy = history.history['accuracy'][-1]
+                st.write(f"Train accuracy for {selected_model} is {round(accuracy*100, 5)}%")
+            view_test_accuracy = st.button("View test accuracy")
+            if view_test_accuracy:
+                loss, accuracy = model.evaluate(X_test, Y_test)
+                st.write(f"Test accuracy for {selected_model} is {round(accuracy*100, 5)}%")
 
 if __name__ == "__main__":
     main()
