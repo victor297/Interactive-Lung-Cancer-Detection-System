@@ -11,12 +11,13 @@ pip install sklearn
 pip install streamlit
 pip install imblearn
 pip install tensorflow
+pip install streamlit-marquee
 ```
 ## To run the file
 ```
     1. Download the source code, give it a name
     2. Open any terminal and locate the file
-    3. Use the command "streamlit run file_name.py"
+    3. Use the command "python -m streamlit run <file_name.py>"
 ```
 
 
@@ -39,6 +40,7 @@ import streamlit
 import tensorflow as tf
 from tensorflow import keras
 from imblearn.combine import SMOTETomek
+from streamlit_marquee import streamlit_marquee
 ```
 
 ## Classification techniques used

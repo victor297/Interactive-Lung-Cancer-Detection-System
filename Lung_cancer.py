@@ -11,13 +11,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import streamlit as st
-import tensorflow as tf
 from tensorflow import keras
 from imblearn.combine import SMOTETomek
+from streamlit_marquee import streamlit_marquee
+
 
 #streamlit title
 st.title("Lung Cancer Detection")
-
+streamlit_marquee(**{'background': "#FFFFFF",  "color": "#000000", 'content':'Machine learning models may occasionally produce false positives,  hence, it is recommended to not rely on the results predicted here.'})
 
 convert = {
     'Yes': 2,
@@ -33,7 +34,7 @@ convert = {
 def main():
     
     #data retrieval
-    data = pd.read_csv('D:\Programming\Streamlit\cancer_data.csv')
+    data = pd.read_csv('cancer_data.csv')
 
     #plotting label
     # label_counts = data['LUNG_CANCER'].value_counts()
@@ -189,7 +190,7 @@ def main():
                         with st.spinner('Please wait while the decision tree is being loaded...'):
                             plt.figure(figsize=(50, 10))
                             plot_tree(decision_tree=Decision_Tree_model, filled=True,
-                                feature_names=X.columns, rounded=True)
+                                feature_names=list(X.columns), rounded=True)
                             st.pyplot(plt)            
                     ptrain = Decision_Tree_model.predict(X_train.values)
                     accuracy = accuracy_score(Y_train, ptrain)
